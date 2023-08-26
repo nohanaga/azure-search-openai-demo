@@ -8,8 +8,11 @@ from approaches.approach import ChatApproach
 from core.messagebuilder import MessageBuilder
 from core.modelhelper import get_token_limit
 from text import nonewlines
+from azure.cosmos import CosmosClient, PartitionKey
+import uuid
+from datetime import datetime
 
-class ChatReadRetrieveReadApproach(ChatApproach):
+class ChatReadRetrieveReadApproachCosmosDB(ChatApproach):
     # Chat roles
     SYSTEM = "system"
     USER = "user"
@@ -70,7 +73,7 @@ If you cannot generate a search query, return only the number 0.
         {'role' : ASSISTANT, 'content' : '徳川家康 人物 武功 業績' }
     ]
 
-    def __init__(self, search_client: SearchClient, chatgpt_deployment: str, chatgpt_model: str, embedding_deployment: str, sourcepage_field: str, content_field: str):
+    def __init__(self, search_client: SearchClient, cosmos_container, chatgpt_deployment: str, chatgpt_model: str, embedding_deployment: str, sourcepage_field: str, content_field: str):
         self.search_client = search_client
         self.chatgpt_deployment = chatgpt_deployment
         self.chatgpt_model = chatgpt_model
@@ -78,6 +81,9 @@ If you cannot generate a search query, return only the number 0.
         self.sourcepage_field = sourcepage_field
         self.content_field = content_field
         self.chatgpt_token_limit = get_token_limit(chatgpt_model)
+        self.cosmos_container = cosmos_container
+        self.chat_session_id = str(uuid.uuid4())
+        print(self.chatgpt_token_limit, chatgpt_model)
 
     async def run(self, history: list[dict[str, str]], overrides: dict[str, Any]) -> Any:
         has_text = overrides.get("retrieval_mode") in ["text", "hybrid", None]
@@ -193,6 +199,24 @@ If you cannot generate a search query, return only the number 0.
         chat_content = chat_completion.choices[0].message.content
         print(chat_content)
         msg_to_display = '\n\n'.join([str(message) for message in messages])
+
+        # STEP 4: Store the chat history and answer in Cosmos DB
+        new_item = {
+            "id": str(uuid.uuid4()),
+            "chat_session_id": self.chat_session_id,
+            "user_id": "A00000001",
+            "timestamp": datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+            "conversation": [
+                {"role": "user", "content": history[-1]["user"]},
+                {"role": "assistant", "content": chat_content}
+            ],
+            "feedback": 1
+        }
+        try:
+            self.cosmos_container.create_item(new_item)
+        except Exception as e:
+            print(e)
+            pass
 
         return {"data_points": results, "answer": chat_content, "thoughts": f"Searched for:<br>{query_text}<br><br>Conversations:<br>" + msg_to_display.replace('\n', '<br>')}
 

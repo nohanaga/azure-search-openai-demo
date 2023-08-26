@@ -8,12 +8,12 @@ export type ExampleModel = {
 };
 
 const EXAMPLES: ExampleModel[] = [
+    { text: "三浦義澄って何した人", value: "三浦義澄って何した人" },
     {
-        text: "What is included in my Northwind Health Plus plan that is not in standard?",
-        value: "What is included in my Northwind Health Plus plan that is not in standard?"
+        text: "源実朝は征夷大将軍として知られているだけでなく、ある有名な趣味も持っています。それは何ですか。",
+        value: "源実朝は征夷大将軍として知られているだけでなく、ある有名な趣味も持っています。それは何ですか。"
     },
-    { text: "What happens in a performance review?", value: "What happens in a performance review?" },
-    { text: "What does a Product Manager do?", value: "What does a Product Manager do?" }
+    { text: "源範頼の簡単な情報と、彼のゆかりの地にあるいいカフェを教えて", value: "源範頼の簡単な情報と、彼のゆかりの地にあるいいカフェを教えて" }
 ];
 
 interface Props {

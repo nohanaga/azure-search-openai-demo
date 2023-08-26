@@ -24,8 +24,8 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            "/ask": "http://localhost:50505",
-            "/chat": "http://localhost:50505"
+            "/ask": "http://127.0.0.1:50505",
+            "/chat": "http://127.0.0.1:50505"
         }
     }
 });

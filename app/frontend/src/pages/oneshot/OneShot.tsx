@@ -129,9 +129,13 @@ export function Component(): JSX.Element {
             key: Approaches.ReadRetrieveRead,
             text: "Read-Retrieve-Read"
         },
+        // {
+        //     key: Approaches.ReadDecomposeAsk,
+        //     text: "Read-Decompose-Ask"
+        // },
         {
-            key: Approaches.ReadDecomposeAsk,
-            text: "Read-Decompose-Ask"
+            key: Approaches.ReadPluginsRetrieve,
+            text: "Read-Plugins-Retrieve"
         }
     ];
 

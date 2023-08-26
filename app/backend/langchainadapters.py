@@ -33,7 +33,9 @@ class HtmlCallbackHandler (BaseCallbackHandler):
         self, serialized: Dict[str, Any], inputs: Dict[str, Any], **kwargs: Any
     ) -> None:
         """Print out that we are entering a chain."""
-        class_name = serialized["name"]
+        class_name = "unknown"
+        if "name" in serialized:
+            class_name = serialized["name"]
         self.html += f"Entering chain: {ch(class_name)}<br>"
 
     def on_chain_end(self, outputs: Dict[str, Any], **kwargs: Any) -> None:
