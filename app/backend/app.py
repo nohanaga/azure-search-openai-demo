@@ -157,9 +157,8 @@ async def setup_clients():
         credential=azure_credential)
     
     # Set up a Cosmos DB client to store the chat history
-    #endpoint = 'https://<Your-CosmosDB-Account>.documents.azure.com:443/'
-    #key = '<Your-CosmosDB-Key>'
-
+    endpoint = 'https://<Your-CosmosDB-Account>.documents.azure.com:443/'
+    key = '<Your-CosmosDB-Key>'
     cosmos_container = []
     try:
         cosmos_client = CosmosClient(url=endpoint, credential=key)
