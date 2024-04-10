@@ -173,7 +173,7 @@ async def setup_clients():
 
     # Used by the OpenAI SDK
     openai.api_base = f"https://{AZURE_OPENAI_SERVICE}.openai.azure.com"
-    openai.api_version = "2023-07-01-preview"
+    openai.api_version = "2024-02-01"
     openai.api_type = "azure_ad"
     openai_token = await azure_credential.get_token(
         "https://cognitiveservices.azure.com/.default"
